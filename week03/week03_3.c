@@ -11,8 +11,8 @@ int main(int argc, char *argv[])
 	printf("enter a character: ");
 	scanf("%c", &alph);
 	
-	alph_asc = alph;
-	nextalph_asc = alph_asc + 1;     //get next alphabet by using AscII code
+	alph_asc = alph;      //get input alphabet's ASCII code
+	nextalph_asc = alph_asc + 1;     //get next alphabet by using ASCII code
 	nextalph = nextalph_asc;
 	
 	printf("the next character of %c (%d) is %c (%d)", alph, alph_asc, nextalph, nextalph_asc);
