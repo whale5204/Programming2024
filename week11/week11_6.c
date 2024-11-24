@@ -6,15 +6,16 @@
 int main(int argc, char *argv[]) 
 {
 	FILE *fp;
-	char c;
+	char str[20];
+	char *c;
 	
 	fp = fopen("sample.txt", "r");
 	
 	if (fp==NULL)
 	  printf("Can't open the file\n");
 	
-	while ((c=fgetc(fp))!=EOF)
-		putchar(c);
+	while ((c=fgets(str, 20, fp))!=NULL)
+		printf("%s", c);
 	
 	fclose(fp);
 	
