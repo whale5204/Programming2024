@@ -5,12 +5,12 @@
 
 char *proverb = "All that glisters is not gold.";
 
+//swap sentence
 void setPointer(char **q)
 {
 	*q = proverb;
 }
 
-//swap sentence
 int main(int argc, char *argv[]) 
 {
 	char *p = "zzz";
@@ -22,6 +22,11 @@ int main(int argc, char *argv[])
 }
 
 /*
+void setPointer(char *q)
+{
+	q = proverb;
+}
+
 int main(int argc, char *argv[]) 
 {
 	char *p = "zzz";
