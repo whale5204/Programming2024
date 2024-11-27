@@ -14,13 +14,13 @@ int main(int argc, char *argv[])
 		scanf("%d", &grade[i]);
 	}
 	
-	int *p = grade;
+	int (*p)[5] = grade;
 	int sum = 0;
 	
 	for (i=0; i<5; i++)
 	{
-		printf("grade[%i] = %i\n", i, p[i]);
-		sum+=p[i];
+		printf("grade[%i] = %i\n", i, (*p)[i]);
+		sum+=(*p)[i];
 	}
 	
 	printf("average: %i", sum/5);
