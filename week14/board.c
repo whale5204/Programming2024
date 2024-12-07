@@ -50,20 +50,27 @@ int board_initBoard(void)
         board_coin[i] = 0;
     }
     //coin allocation
-    for (i=0;i<N_COINPOS;i++)
-	{
-		while (board_coin[i] == 0)
+    //이렇게 복잡하게까지 해야하나...? 일단 고민해봄 
+    int total_coin = 0;    //for counting total coin on board
+    for (i=0; i<N_COINPOS; i++)
+    {
+    	while (total_coin < N_COINPOS)
 		{
-			int coinpos = rand()%(N_BOARD + 1);
-			if (board_coin[coinpos] == 0)
+		    int coinpos = rand()%(N_BOARD + 1);  //random coin's position
+		    if (board_coin[coinpos] == 0)
 			{
 				//i-th coin allocation
-				board_coin[coinpos] = rand()%(MAX_COIN) + 1;
+			    board_coin[coinpos] = rand()%(MAX_COIN) + 1;
+			    total_coin += board_coin[coinpos];
+			    //if total_coin > N_COINPOS in the end of the result
+			    if (total_coin > N_COINPOS)
+			    {
+			    	board_coin[coinpos] -= total_coin - N_COINPOS;
+				}
 			}
 		}
-	//
 	//checking 
-	for (i=0;i<N_BOARD;i++)
+	for (i=0; i<N_BOARD; i++)
 	{
 		printf("%d", board_coin[i]);
 	}
@@ -85,7 +92,14 @@ int board_initBoard(void)
 // ----- EX. 5 : shark ------------
 int board_stepShark(void)
 {
-
+	int i;
+	int sharkstep = rand()%(MAX_SHARKSTEP) + 1;    //sharkstep in one turn
+	//make boardstatus "X"
+	for (i=shark_position; i<(shark_position + sharkstep); i++)
+	{
+		board_status[i] = BOARDSTATUS_NOK;
+	}
+	shark_position += sharkstep;
 }
 // ----- EX. 5 : shark ------------
 
