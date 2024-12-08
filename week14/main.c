@@ -192,7 +192,6 @@ int main(int argc, const char * argv[]) {
         int dum;
         int pos = 0;
 
-a
 // ----- EX. 4 : player ------------
         if 
 		(player_status[turn] != PLAYERSTATUS_LIVE)
@@ -222,9 +221,7 @@ a
         
         //step 2-3. moving
         player_position[turn] += dieResult;
-		//checking
-		printf("%d\n", player_position[turn]);
-		
+        
 		//if player reach the end of the board
 		if (player_position[turn]>N_BOARD-2)
         {
@@ -261,6 +258,7 @@ a
     } while(game_end() == 0);
     
     //step 3. game end process
+    //print the lastboard and player status
     board_printBoardStatus();
     printPlayerStatus();
     printf("GAME END!!\n");
