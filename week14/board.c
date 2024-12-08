@@ -6,8 +6,8 @@
 #include "board.h"
 
 // ----- EX. 3 : board ------------
-#define N_COINPOS       12 //내가 가지고 있는 코인 개수 
-#define MAX_COIN        4  //한번에 가질 수 있는 최대 코인 개수 
+#define N_COINPOS       12  //total coin number on board
+#define MAX_COIN        4   //maximum coin number on one block
 // ----- EX. 3 : board ------------
 // ----- EX. 5 : shark ------------
 #define MAX_SHARKSTEP   6
@@ -50,31 +50,30 @@ int board_initBoard(void)
         board_coin[i] = 0;
     }
     //coin allocation
-    //이렇게 복잡하게까지 해야하나...? 일단 고민해봄 
     int total_coin = 0;    //for counting total coin on board
-    for (i=0; i<N_COINPOS; i++)
-    {
-    	while (total_coin < N_COINPOS)
+    while (total_coin < N_COINPOS)
+	{
+		int coinpos = rand()%(N_BOARD + 1);  //random coin's position
+		if (board_coin[coinpos] == 0)
 		{
-		    int coinpos = rand()%(N_BOARD + 1);  //random coin's position
-		    if (board_coin[coinpos] == 0)
+			//i-th coin allocation
+			board_coin[coinpos] = rand()%(MAX_COIN) + 1;
+			total_coin += board_coin[coinpos];
+			//if total_coin > N_COINPOS in the end of the result
+			if (total_coin > N_COINPOS)
 			{
-				//i-th coin allocation
-			    board_coin[coinpos] = rand()%(MAX_COIN) + 1;
-			    total_coin += board_coin[coinpos];
-			    //if total_coin > N_COINPOS in the end of the result
-			    if (total_coin > N_COINPOS)
-			    {
-			    	board_coin[coinpos] -= total_coin - N_COINPOS;
-				}
+			    board_coin[coinpos] -= total_coin - N_COINPOS;
 			}
 		}
-	//checking 
-	for (i=0; i<N_BOARD; i++)
-	{
-		printf("%d", board_coin[i]);
 	}
-	printf("\n");
+	//checking 
+    for (i=0; i<N_COINPOS; i++)
+    {	
+	    for (i=0; i<N_BOARD; i++)
+	    {
+		    printf("%d", board_coin[i]);
+	    }
+	    printf("\n");
 	}
 	//
 // ----- EX. 5 : shark ------------
@@ -95,11 +94,20 @@ int board_stepShark(void)
 	int i;
 	int sharkstep = rand()%(MAX_SHARKSTEP) + 1;    //sharkstep in one turn
 	//make boardstatus "X"
-	for (i=shark_position; i<(shark_position + sharkstep); i++)
+	shark_position += sharkstep;
+	//if shark gets to the end of the board
+	if (shark_position > N_BOARD-2)
+	{
+		shark_position = N_BOARD - 2;
+	}
+	for (i=(shark_position - sharkstep); i<(shark_position + 1); i++)
 	{
 		board_status[i] = BOARDSTATUS_NOK;
 	}
-	shark_position += sharkstep;
+	//checking
+	printf("Shark moved %d steps\n", sharkstep);
+	
+	return shark_position;
 }
 // ----- EX. 5 : shark ------------
 

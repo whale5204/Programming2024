@@ -142,9 +142,14 @@ int getWinner(void)
 	//get max coin
     for (i=0; i<N_PLAYER; i++)
     {
-    	if (player_coin[i] > max_coin)
+    	//find alive player
+    	if (player_status[i] == PLAYERSTATUS_DIE)
     	{
-    		max_coin = player_coin[i];
+    		continue;
+		}
+		if (player_coin[i] > max_coin)
+		{
+			max_coin = player_coin[i];
     		winner = i;
 		}
 	}
@@ -187,8 +192,10 @@ int main(int argc, const char * argv[]) {
         int dum;
         int pos = 0;
 
+a
 // ----- EX. 4 : player ------------
-        if (player_status[turn] != PLAYERSTATUS_LIVE)
+        if 
+		(player_status[turn] != PLAYERSTATUS_LIVE)
         {
             turn = (turn + 1)%N_PLAYER;
             continue;
@@ -217,6 +224,13 @@ int main(int argc, const char * argv[]) {
         player_position[turn] += dieResult;
 		//checking
 		printf("%d\n", player_position[turn]);
+		
+		//if player reach the end of the board
+		if (player_position[turn]>N_BOARD-2)
+        {
+        	player_position[turn] = N_BOARD - 1;
+        	player_status[turn] = PLAYERSTATUS_END;
+		} 
    
         //step 2-4. coin
         coinResult = board_getBoardCoin(player_position[turn]);
@@ -225,16 +239,9 @@ int main(int argc, const char * argv[]) {
         	printf("Player %s got %d coin!\n", player_name[turn], coinResult);
         	player_coin[turn] += coinResult;
 		}
-		
-        //if player reach the end of the board
-		if (player_position[turn]>N_BOARD-1)
-        {
-        	player_position[turn] = N_BOARD - 1;
-        	player_status[turn] = PLAYERSTATUS_END;
-		} 
         
         //step 2-5. end process
-        //end player's turn
+        //end one player's turn
         turn = (turn + 1)%N_PLAYER;
         
         //move shark
@@ -254,6 +261,8 @@ int main(int argc, const char * argv[]) {
     } while(game_end() == 0);
     
     //step 3. game end process
+    board_printBoardStatus();
+    printPlayerStatus();
     printf("GAME END!!\n");
     printf("%i players are alive! winner is %s\n", getAlivePlayer(), player_name[getWinner()]);
 // ----- EX. 6 : game end ------------
