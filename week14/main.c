@@ -193,12 +193,12 @@ int main(int argc, const char * argv[]) {
         int pos = 0;
 
 // ----- EX. 4 : player ------------
-        if 
-		(player_status[turn] != PLAYERSTATUS_LIVE)
+        //end turn if player is dead
+        if (player_status[turn] != PLAYERSTATUS_LIVE)
         {
-            turn = (turn + 1)%N_PLAYER;
-            continue;
-        }
+        	turn = (turn + 1)%N_PLAYER;
+			continue;
+		}
 // ----- EX. 4 : player ------------
         
         //step 2-1. status printing
@@ -238,16 +238,61 @@ int main(int argc, const char * argv[]) {
 		}
         
         //step 2-5. end process
+        
         //end one player's turn
         turn = (turn + 1)%N_PLAYER;
         
         //move shark
-        if (turn == 0)
+        //if player in last turn died(example: player A, B, C and player C died)
+        if (player_status[N_PLAYER - 1] != PLAYERSTATUS_LIVE && turn == N_PLAYER - 1)
         {
         	int shark_pos = board_stepShark();
         	printf("Shark moved to %i\n", shark_pos);
-        	//check die
-        	checkDie();
+        	//die when player position = shark
+        	for (i=0; i<N_PLAYER; i++)
+        	{
+        		if (player_position[i] == shark_pos)
+        		{
+        			player_status[i] = PLAYERSTATUS_DIE;
+				}
+			}
+			//check die
+			checkDie();
+		}
+		//if only player in first turn is alive(example: only player A is alive)
+		else if (player_status[N_PLAYER - 1] != PLAYERSTATUS_LIVE && player_status[N_PLAYER - 2] != PLAYERSTATUS_LIVE)
+		{
+			int shark_pos = board_stepShark();
+        	printf("Shark moved to %i\n", shark_pos);
+        	//die when player position = shark
+        	for (i=0; i<N_PLAYER; i++)
+        	{
+        		if (player_position[i] == shark_pos)
+        		{
+        			player_status[i] = PLAYERSTATUS_DIE;
+				}
+			}
+			//check die
+			checkDie();
+		}
+		//other case
+		else
+		{
+			if (turn == 0)
+			{
+        		int shark_pos = board_stepShark();
+        		printf("Shark moved to %i\n", shark_pos);
+        		//die when player position = shark
+        		for (i=0; i<N_PLAYER; i++)
+        		{
+        			if (player_position[i] == shark_pos)
+        			{
+        				player_status[i] = PLAYERSTATUS_DIE;
+					}
+				}
+				//check die
+				checkDie();
+			}
 		}
 		
 		//end game if all player die
@@ -258,11 +303,19 @@ int main(int argc, const char * argv[]) {
     } while(game_end() == 0);
     
     //step 3. game end process
-    //print the lastboard and player status
+    //print the last board and player status
     board_printBoardStatus();
     printPlayerStatus();
     printf("GAME END!!\n");
-    printf("%i players are alive! winner is %s\n", getAlivePlayer(), player_name[getWinner()]);
+    if (getAlivePlayer() == 0)   //if all players are dead make no winner
+    {
+    	printf("players are all dead! there is no winner!");
+	}
+	else
+	{
+		printf("%i players are alive! winner is %s\n", getAlivePlayer(), player_name[getWinner()]);
+	}
+	
 // ----- EX. 6 : game end ------------
     
 // ----- EX. 2 : structuring ------------
